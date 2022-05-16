@@ -1,0 +1,26 @@
+{
+  "name": "lumberjill-backend-node",
+  "version": "1.0.0",
+  "description": "log collection filter on node express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "log",
+    "collection",
+    "filter",
+    "on",
+    "node",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "hyper-express": "^6.1.3",
+    "ip": "^1.1.8",
+    "nodemon": "^2.0.16"
+  }
+}
