@@ -1,5 +1,5 @@
 # lumberjill-backend-node
-More info here which describes how this node agent can be used
+More info which describes how this node agent can be used with frontend:
 https://github.com/half-metal/frontend-sveltekit-lumberjill/blob/master/README.md
 
 
@@ -11,6 +11,7 @@ Start the file as usual with node, npx, nodemon, pm2, depending what your goal i
 ```nodemon hyperStream.js```
 
 Now you can search list of log files and log contents with REST calls
+
 POST /fileList will return a list of log files in specified directory
 ```
 POST /fileList
