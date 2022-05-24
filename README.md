@@ -36,8 +36,11 @@ Content-Length: 104
 ```
 
 *PARAMETERS
+
 fileName:name of file
+
 searchDirectory:directory which is used by both /fileList and /fileContents
+
 searchFilter:filter used to only return lines with specific search terms
 
 
