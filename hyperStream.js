@@ -49,20 +49,20 @@ Server.post('/fileContents', async (request, response) => {
             console.log('body is:',body)
             const stats = await fsp.stat(`${searchDirectory}/${fileName}`)
             const chunkSize = 65536 //standard chunk size
-            const fileSizeThreshold = 314572800 //300mb
+            const fileSizeThreshold = 411451160 //411mb
             const chunkCount = Math.ceil(stats.size/chunkSize) //eg 19200 for 300mb file
             const chunksReturned = Math.ceil(chunkCount/2) //this is intended to enable pagination by chunks and is half of total chunks, not implemented yet
             let readStart
             const readEnd = stats.size
             //&if file greater than certain threshold, then paginate for infinite scroll
-            stats.size > fileSizeThreshold ? (readStart = ((chunkCount - chunksReturned) * chunkSize),console.log('File larger than 300mb')) : readStart = 0
+            stats.size > fileSizeThreshold ? (readStart = ((chunkCount - chunksReturned) * chunkSize),console.log(`File larger than ${fileSizeThreshold}`)) : readStart = 0
             const file = `${searchDirectory}/${fileName}`
             const filePath = `${searchDirectory}/${fileName}`
 
             const readStream = fs.createReadStream(file, {encoding:'utf8', start: readStart, end: readEnd, highWaterMark: 65536})
-            console.log('Size of file:',stats.size,'chunkCount:',chunkCount,'readStart:',readStart,'chunksReturned:',chunksReturned, 'pageNumber:', pageNumber)
-            const reversedDataFilePath = filePath.split('.')[0] + '-reversed.'+ filePath.split('.')[1];
-            const writeStream = fs.createWriteStream(reversedDataFilePath);
+            console.log('Size of file:',stats.size,'totalChunkCount:',chunkCount,'readStart:',readStart,'chunksReturned:',chunksReturned, 'pageNumber:', pageNumber)
+            //const reversedDataFilePath = filePath.split('.')[0] + '-reversed.'+ filePath.split('.')[1]; //extra code if want to create a file
+            //const writeStream = fs.createWriteStream(reversedDataFilePath); //extra code if want to create a file
             
               function reverse(filePath) {
                 let cnt = 0 //value to track chunks
