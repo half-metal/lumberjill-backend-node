@@ -3,19 +3,34 @@
 //* Two POST routes are used:
 //* 1) /fileList allows searching directory
 //* 2) /fileContents allows parsing and searching the contents of particular file
+//* this has not been updated with latest code similar to hyperStream.js
+//TODO update code so Express can be used with streams/chunks which can be used on old OS
 
-const express = require('express'); //ended us using express since uWebsocket implementation required newer CentOS or newer GlibC 
+
+import fss from 'fs';
+import events from "events"
+import readline from 'node:readline';
+import HyperExpress from 'hyper-express'
+import cors from 'cors'
+import fs from 'node:fs/promises'
+import path from 'path'
+import ip from 'ip'
+import express from 'express'
 const app = express();
-const fs = require("fs").promises; //promises FTW
-const path = require("path"); // find path in case needed
-const cors = require('cors') //allows accessing server using fetch if necessary
-var ip = require('ip'); //easiest implementation of getting IP
+
+//const express = require('express'); //ended us using express since uWebsocket implementation required newer CentOS or newer GlibC 
+//const app = express();
+//const fs = require("fs").promises; //promises FTW
+//const path = require("path"); // find path in case needed
+//const cors = require('cors') //allows accessing server using fetch if necessary
+//var ip = require('ip'); //easiest implementation of getting IP
 let port = 8082
 let res = []
 let parsedFileContents = []
 let serverIp = ip.address()
 let appName =  `Lumberjill`
 let version =  `0.1`
+let date1, date2
 console.log (`appName:${appName} version:${version} hosted at:${serverIp}:${port}`) //list the app and version on startup
 
 
@@ -34,7 +49,7 @@ app.post('/fileList', (req, response) => {
     const url = req.originalUrl;
     const hostUrl = `${protocol}://${host}:${port}`
     console.log("request made to server from:", req.ip)
-    console.log(__dirname);
+    //console.log(__dirname);
     async function getDirectory() {
         try {
             let body = await req.body
@@ -73,7 +88,7 @@ app.post('/fileContents', (req, response) => {
     const fullUrl = `${protocol}://${host}:${port}`
     //& todo add in other parts//
     console.log("request made to server from:", req.ip)
-    console.log(__dirname);
+    //console.log(__dirname);
     async function getDirectory() {
         try {
             let body = await req.body
