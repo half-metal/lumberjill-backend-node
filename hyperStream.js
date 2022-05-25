@@ -17,6 +17,7 @@ import HyperExpress from 'hyper-express'
 import cors from 'cors'
 import path from 'path'
 import ip from 'ip'
+import fsb from 'fs-backwards-stream'
 const Server = new HyperExpress.Server();
 const port = 8082
 let res
@@ -48,7 +49,7 @@ Server.post('/fileContents', async (request, response) => {
             console.log('${searchDirectory}/${fileName} before is:',`${searchDirectory}/${fileName}`)
             console.log('body is:',body)
             const stats = await fsp.stat(`${searchDirectory}/${fileName}`)
-            const chunkSize = 65536 //standard chunk size
+            const chunkSize = 16383 //standard chunk size
             const fileSizeThreshold = 411451160 //411mb
             const chunkCount = Math.ceil(stats.size/chunkSize) //eg 19200 for 300mb file
             const chunksReturned = Math.ceil(chunkCount/2) //this is intended to enable pagination by chunks and is half of total chunks, not implemented yet
@@ -59,7 +60,7 @@ Server.post('/fileContents', async (request, response) => {
             const file = `${searchDirectory}/${fileName}`
             const filePath = `${searchDirectory}/${fileName}`
 
-            const readStream = fs.createReadStream(file, {encoding:'utf8', start: readStart, end: readEnd, highWaterMark: 65536})
+            const readStream = fsb(file, {block:chunkSize, start:readEnd, end:readStart}) //reads in reverse
             console.log('Size of file:',stats.size,'totalChunkCount:',chunkCount,'readStart:',readStart,'chunksReturned:',chunksReturned, 'pageNumber:', pageNumber)
             //const reversedDataFilePath = filePath.split('.')[0] + '-reversed.'+ filePath.split('.')[1]; //extra code if want to create a file
             //const writeStream = fs.createWriteStream(reversedDataFilePath); //extra code if want to create a file
@@ -72,7 +73,6 @@ Server.post('/fileContents', async (request, response) => {
                         let totalCount = reversedChunk.length
                         cnt++
                         let chunkDelimiter = 'chunkDelimiter:LJ' + cnt
-                        //console.log('amount of chunks pushed:',cnt) //@debug
                         //if (reversedChunk.includes(searchFilter)){ //if you wanted to filter entire chunks
                             this.push(chunkDelimiter + ' ' + reversedChunk);
                             //this.push({reversedChunk});
@@ -127,9 +127,4 @@ Server.post('/fileList', (req, response) => {
             }
     }
     getDirectory()
-
 })
-
-
-
-
