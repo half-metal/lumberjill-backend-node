@@ -52,8 +52,8 @@ Server.post('/fileContents', async (request, response) => {
             const chunkSize = 16383 //standard chunk size
             const fileSizeThreshold = 411451160 //411mb
             const chunkCount = Math.ceil(stats.size/chunkSize) //eg 19200 for 300mb file
-            const chunksReturned = Math.ceil(chunkCount/4) //this is intended to enable pagination by chunks and is 1/3 of total chunks, not implemented yet
-            //const chunksReturned = (chunkCount - Math.ceil(fileSizeThreshold/chunkSize)) //maintain that max threshold
+            //const chunksReturned = Math.ceil(chunkCount/4) //this is intended to enable pagination by chunks and is 1/3 of total chunks, not implemented yet
+            const chunksReturned = (Math.ceil(fileSizeThreshold/chunkSize)) //maintain that max threshold TODO update later  keep in mind this changes readStart which is where the file ends, TODO update later
             let readStart
             const readEnd = stats.size
             //&if file greater than certain threshold, then paginate for infinite scroll
