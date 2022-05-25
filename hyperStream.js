@@ -72,10 +72,10 @@ Server.post('/fileContents', async (request, response) => {
                         const reversedChunk = (chunk.toString().split('\n').filter((logContents) => logContents.includes(searchFilter))).reverse().join('\n');
                         let totalCount = reversedChunk.length
                         cnt++
-                        let chunkDelimiter = 'chunkDelimiter:LJ' + cnt
+                        //let chunkDelimiter = 'chunkDelimiter:LJ' + cnt //@debug line
                         //if (reversedChunk.includes(searchFilter)){ //if you wanted to filter entire chunks
-                            this.push(chunkDelimiter + ' ' + reversedChunk);
-                            //this.push({reversedChunk});
+                            //this.push(chunkDelimiter + ' ' + reversedChunk); //@debug line
+                            this.push(reversedChunk);
                         //}
                         next();
                     }
